@@ -6,7 +6,7 @@
 /*   By: doligtha <doligtha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 15:17:50 by doligtha          #+#    #+#             */
-/*   Updated: 2023/12/21 19:00:42 by doligtha         ###   ########.fr       */
+/*   Updated: 2023/12/21 19:26:15 by doligtha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,3 +209,6 @@ write(1, "\n"BLUE"[X conversion]"RESET"\n", 28);
 		(void *)42, (void *)442, (void *)42, (void *)42, (void *)42, (void *)42, (void *)42, (void *)42, (void *)42, (void *)42);
 	return (0);
 }
+/*
+make re && cc tester.c libftprintf.a -o printf && ./printf
+*/

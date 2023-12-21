@@ -1,3 +1,4 @@
+# make re && cc tester.c libftprintf.a -o printf && ./printf
 all:
 	cc -Wall -Wextra -Werror -o ft_printf.o -c ft_printf.c
 	ar rcs libftprintf.a ft_printf.o
