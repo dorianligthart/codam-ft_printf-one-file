@@ -6,15 +6,15 @@
 /*   By: doligtha <doligtha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 00:44:30 by dligthar          #+#    #+#             */
-/*   Updated: 2023/12/21 17:21:13 by doligtha         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:17:13 by doligtha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdarg.h>
-#include <unistd.h>
+#include <stdarg.h> //va_list, va_start(), va_arg(), va_end()
+#include <unistd.h> //write()
 
-static char *ft_strchr(const char *str, char c, int i)
+static char	*ft_strchr(const char *str, char c, int i)
 {
 	while (str && str[++i])
 		if (str[i] == (unsigned char)c)
@@ -29,10 +29,11 @@ static int	puint(int fd, unsigned long nbr, char *basestr)
 	unsigned long	divider;
 	int				base;
 	int				i;
-	char			put[64];
+	char			put[31];
 
 	base = 0;
 	while (basestr && basestr[base])
+		base++;
 	if (base < 2)
 		return (-1);
 	divider = 1;
@@ -59,7 +60,8 @@ static int	newformat2(int fd, const char **format, va_list *list, int tmp)
 		tmp = write(fd, "0x", 2);
 		if (tmp < 2)
 			return (-1);
-		return (tmp	+ puint(fd, va_arg(*list, long), "0123456789abcdef"));
+		return (tmp + puint(fd,
+				va_arg(*list, unsigned long), "0123456789abcdef"));
 	}
 	else if ((**format == 'd' || **format == 'i') && *format++)
 	{
@@ -100,9 +102,9 @@ static int	newformat(int fd, const char **format, va_list *list, int tmp)
 		return (write(fd, s, tmp));
 	}
 	else if (**format == 'x' && *format++)
-		return (puint(fd, va_arg(*list, unsigned int), "0123456789abcdef"));
+		return (puint(fd, va_arg(*list, unsigned long), "0123456789abcdef"));
 	else if (**format == 'X' && *format++)
-		return (puint(fd, va_arg(*list, unsigned int), "0123456789ABCDEF"));
+		return (puint(fd, va_arg(*list, unsigned long), "0123456789ABCDEF"));
 	return (newformat2(fd, format, list, 0));
 }
 
