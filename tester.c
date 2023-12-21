@@ -1,14 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   tester.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: doligtha <doligtha@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/23 15:17:50 by doligtha          #+#    #+#             */
-/*   Updated: 2023/12/21 19:26:15 by doligtha         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+/*
+make re && cc tester.c libftprintf.a -o printf && ./printf
+*/
 
 #define RESET "\033[0m"		//4
 #define BLACK "\033[0;30m"	//7
@@ -16,7 +8,7 @@
 #define GREEN "\033[0;32m"	//7
 #define YELLOW "\033[0;33m"	//7
 #define BLUE "\033[0;34m"	//7
-#define MAGENTA "\033[0;35m"//7
+#define MAGENTA "\033[0;35m"	//7
 #define CYAN "\033[0;36m"	//7
 #define WHITE "\033[0;37m"	//7
 
