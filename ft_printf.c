@@ -6,7 +6,7 @@
 /*   By: doligtha <doligtha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 00:44:30 by dligthar          #+#    #+#             */
-/*   Updated: 2023/12/21 18:17:13 by doligtha         ###   ########.fr       */
+/*   Updated: 2023/12/21 18:50:53 by doligtha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,20 @@ static int	newformat2(int fd, const char **format, va_list *list, int tmp)
 {
 	int	nbr;
 
-	if (**format == 'p' && *format++)
+	if (*(*format - 1) == 'p')
 	{
+		nbr = va_arg(*list, unsigned long);
+		if (!nbr)
+			return (write(fd, "(nil)", 5));
 		tmp = write(fd, "0x", 2);
-		if (tmp < 2)
-			return (-1);
-		return (tmp + puint(fd,
-				va_arg(*list, unsigned long), "0123456789abcdef"));
+		nbr = puint(fd, nbr, "0123456789abcdef");
+		return (-1 + (tmp >= 0 && nbr >= 0) * (tmp + nbr + 1));
 	}
-	else if ((**format == 'd' || **format == 'i') && *format++)
+	else if ((*(*format - 1) == 'd' || *(*format - 1) == 'i'))
 	{
 		nbr = va_arg(*list, int);
+		if (nbr == -2147483648)
+			return (write(fd, "-2147483648", 11));
 		if (nbr < 0)
 		{
 			tmp = write(fd, "-", 1);
@@ -74,9 +77,7 @@ static int	newformat2(int fd, const char **format, va_list *list, int tmp)
 		nbr = puint(fd, nbr, "0123456789");
 		return (-1 + (tmp >= 0 && nbr >= 0) * (tmp + nbr + 1));
 	}
-	else if (**format == 'u' && *format++)
-		return (puint(fd, va_arg(*list, unsigned int), "0123456789"));
-	return (0);
+	return (puint(fd, va_arg(*list, unsigned int), "0123456789"));
 }
 
 static int	newformat(int fd, const char **format, va_list *list, int tmp)
@@ -85,14 +86,14 @@ static int	newformat(int fd, const char **format, va_list *list, int tmp)
 
 	if (!ft_strchr("cspdiuxX%", **format, -1))
 		return (0);
-	if (**format == '%' && *format++)
+	if (*(++*format) == '%')
 		return (write(fd, "%", 1));
-	else if (**format == 'c' && *format++)
+	else if (*(*format - 1) == 'c')
 	{
 		tmp = va_arg(*list, int);
 		return (write(fd, &tmp, 1));
 	}
-	else if (**format == 's' && *format++)
+	else if (*(*format - 1) == 's')
 	{
 		s = va_arg(*list, char *);
 		if (!s)
@@ -101,10 +102,10 @@ static int	newformat(int fd, const char **format, va_list *list, int tmp)
 			tmp++;
 		return (write(fd, s, tmp));
 	}
-	else if (**format == 'x' && *format++)
-		return (puint(fd, va_arg(*list, unsigned long), "0123456789abcdef"));
-	else if (**format == 'X' && *format++)
-		return (puint(fd, va_arg(*list, unsigned long), "0123456789ABCDEF"));
+	else if (*(*format - 1) == 'x')
+		return (puint(fd, va_arg(*list, unsigned int), "0123456789abcdef"));
+	else if (*(*format - 1) == 'X')
+		return (puint(fd, va_arg(*list, unsigned int), "0123456789ABCDEF"));
 	return (newformat2(fd, format, list, 0));
 }
 
